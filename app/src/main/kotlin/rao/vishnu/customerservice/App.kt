@@ -10,12 +10,14 @@ import io.ktor.server.routing.get
 import io.ktor.server.routing.routing
 import io.ktor.server.response.respond
 
+val customerService = CustomerService()
 fun Application.healthModule() = this.apply {
     install(ContentNegotiation) { json() }
     routing {
         get("/health") {
             call.respond(mapOf("status" to "OK"))
         }
+        customerRoutes(customerService)
     }
 }
 
