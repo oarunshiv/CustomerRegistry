@@ -1,7 +1,12 @@
 package rao.vishnu.customerservice
 
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.assertNull
+import rao.vishnu.customerservice.TestDatabase.ALICE_CUSTOMER
+import rao.vishnu.customerservice.TestDatabase.BOB_CUSTOMER
 import java.util.UUID
 import kotlin.test.BeforeTest
 import kotlin.test.Test
@@ -9,48 +14,53 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CustomerServiceTest {
-
     companion object {
-        private val CUSTOMER_ALICE =
-            Customer(UUID.randomUUID().toString(), "Alice", "In", "Wonderland", "a@example.com", "123")
-        private val ALICE_CREATE_REQUEST = CreateCustomerRequest("Alice", "In", "Wonderland", "a@example.com", "123")
-        private val CUSTOMER_BOB =
-            Customer(UUID.randomUUID().toString(), "Bob", null, "Builder", "b@example.com", "234")
-        private val BOB_CREATE_REQUEST = CreateCustomerRequest("Bob", null, "Builder", "b@example.com", "234")
+        private val THOMAS_CREATE_REQUEST = CreateCustomerRequest("Thomas", "Train", "Engine", "tom@example.com", "678")
         private val UPDATE_REQUEST = UpdateCustomerRequest("Thomas", "", "Engine")
     }
 
     private lateinit var service: CustomerService
 
+    @BeforeAll
+    fun setupDatabase() {
+        TestDatabase.init()
+    }
+
+
     @BeforeTest
     fun setup() {
+        TestDatabase.reset()
         service = CustomerService()
     }
 
     @Test
-    fun `should create a customer with UUID`() {
-        val created = service.create(ALICE_CREATE_REQUEST)
+    fun `should create and retrieve a customer`() {
+        val created = service.create(THOMAS_CREATE_REQUEST)!!
         assertNotNull(created.id)
-        assertEquals(CUSTOMER_ALICE.copy(id = created.id), created)
+        assertThat(THOMAS_CREATE_REQUEST)
+            .usingRecursiveComparison()
+            .ignoringFields("id") // ignores id in the comparison
+            .isEqualTo(created)
+    }
+
+    @Test
+    fun `should fail when creating customer with existing email`() {
+        val created = service.create(THOMAS_CREATE_REQUEST.copy(email = ALICE_CUSTOMER.email))
+        assertNull(created)
     }
 
     @Test
     fun `should return list of all customers`() {
-        service.create(ALICE_CREATE_REQUEST)
-        service.create(BOB_CREATE_REQUEST)
-
         val customers = service.getAll()
-        assertEquals(2, customers.size)
-        assertTrue { customers.all { it.firstName in setOf("Alice", "Bob") } }
+        assertThat(customers).containsExactlyInAnyOrder(ALICE_CUSTOMER, BOB_CUSTOMER)
     }
 
     @Test
     fun `should return customer by ID`() {
-        val created = service.create(BOB_CREATE_REQUEST)
-
-        val found = service.getById(created.id)
-        assertEquals(CUSTOMER_BOB.copy(id = created.id), found)
+        val found = service.getById(ALICE_CUSTOMER.id)
+        assertEquals(ALICE_CUSTOMER, found)
     }
 
     @Test
@@ -60,20 +70,17 @@ class CustomerServiceTest {
 
     @Test
     fun `should update existing customer`() {
-        val created = service.create(ALICE_CREATE_REQUEST)
-
-
-        val result = service.update(created.id, UPDATE_REQUEST)
+        val result = service.update(ALICE_CUSTOMER.id, UPDATE_REQUEST)
         assertTrue(result)
 
-        val fetched = service.getById(created.id)
+        val fetched = service.getById(ALICE_CUSTOMER.id)
         val expectedUpdatedCustomer = Customer(
-            created.id,
+            ALICE_CUSTOMER.id,
             UPDATE_REQUEST.firstName!!,
             null,
             UPDATE_REQUEST.lastName!!,
-            created.email,
-            created.phone
+            ALICE_CUSTOMER.email,
+            ALICE_CUSTOMER.phone
         )
         assertEquals(expectedUpdatedCustomer, fetched)
     }
@@ -86,10 +93,9 @@ class CustomerServiceTest {
 
     @Test
     fun `should delete customer by ID`() {
-        val created = service.create(ALICE_CREATE_REQUEST)
-        val deleted = service.delete(created.id)
+        val deleted = service.delete(ALICE_CUSTOMER.id)
         assertTrue(deleted)
-        assertNull(service.getById(created.id))
+        assertNull(service.getById(ALICE_CUSTOMER.id))
     }
 
     @Test

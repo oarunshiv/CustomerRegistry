@@ -19,6 +19,7 @@ import kotlin.test.assertTrue
 @TestMethodOrder(MethodOrderer.OrderAnnotation::class)
 class ApplicationTest {
     private fun testLocalApplication(block: suspend ApplicationTestBuilder.() -> Unit) = testApplication {
+        TestDatabase.init()
         application { appModule() }
         block()
     }

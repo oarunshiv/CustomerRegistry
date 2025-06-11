@@ -45,6 +45,10 @@ fun Route.customerRoutes(customerService: CustomerService) {
                 return@post
             }
             val created = customerService.create(customer)
+            if(created == null) {
+                call.respond(HttpStatusCode.BadRequest, "Duplicate emailId")
+                return@post
+            }
             call.respond(HttpStatusCode.Created, created)
         }
 

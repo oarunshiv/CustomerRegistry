@@ -1,52 +1,51 @@
 package rao.vishnu.customerservice
 
+import io.github.oshai.kotlinlogging.KotlinLogging
+import org.jetbrains.exposed.v1.exceptions.ExposedSQLException
+import org.jetbrains.exposed.v1.jdbc.transactions.transaction
 import java.util.UUID
-import java.util.concurrent.ConcurrentHashMap
+
+private val logger = KotlinLogging.logger {}
 
 class CustomerService {
-    private val customers = ConcurrentHashMap<String, Customer>()
-
-    fun getAll(): List<Customer> = customers.values.toList()
-
-    fun getById(id: String) = customers[id]
-
-    fun create(customer: CreateCustomerRequest): Customer {
-        val id = UUID.randomUUID().toString()
-        val newCustomer = Customer(
-            id = id,
-            firstName = customer.firstName,
-            middleName = customer.middleName,
-            lastName = customer.lastName,
-            email = customer.email,
-            phone = customer.phone,
-        )
-        customers[id] = newCustomer
-
-        return newCustomer
+    fun getAll(): List<Customer> = transaction {
+        CustomerEntity.all().map { it.toCustomer() }
     }
 
-    fun update(id: String, updatedCustomer: UpdateCustomerRequest): Boolean {
-        return customers.computeIfPresent(id) { id, oldCustomer ->
-            val removeMiddleName = updatedCustomer.middleName?.isEmpty() == true
-            val updatedMiddleName = if(updatedCustomer.middleName != null) {
-                if(removeMiddleName)
-                    null
-                else
-                    updatedCustomer.middleName
-            } else {
-                oldCustomer.middleName
+    fun getById(id: String) = transaction {
+        CustomerEntity.findById(UUID.fromString(id))?.toCustomer()
+    }
+
+    fun create(customer: CreateCustomerRequest) = try {
+        transaction {
+            CustomerEntity.new { fromCustomer(customer) }.toCustomer()
+        }
+    } catch (e: ExposedSQLException) {
+        if(e.errorCode == 23505) {
+            logger.error(e) { "emailId is duplicate" }
+        } else {
+            logger.error(e) { "Unknown exception" }
+        }
+        // TODO instead of returning null, return proper data type with possible return values
+        null
+    }
+
+    fun update(id: String, updatedCustomer: UpdateCustomerRequest): Boolean =
+        transaction {
+            val updatedEntity = CustomerEntity.findByIdAndUpdate(UUID.fromString(id)) { entity ->
+                updatedCustomer.firstName?.let { entity.firstName = it }
+                updatedCustomer.lastName?.let { entity.lastName = it }
+                updatedCustomer.email?.let { entity.email = it }
+                updatedCustomer.phone?.let { entity.phone = it }
+                updatedCustomer.middleName?.let {
+                    // Remove middleName when empty string is passed explicitly.
+                    entity.middleName = it.takeIf { it.isNotBlank() }
+                }
             }
+            updatedEntity != null
+        }
 
-            Customer(
-                id = id,
-                firstName = updatedCustomer.firstName ?: oldCustomer.firstName,
-                middleName = updatedMiddleName,
-                lastName = updatedCustomer.lastName ?: oldCustomer.lastName,
-                email = updatedCustomer.email ?: oldCustomer.email,
-                phone = updatedCustomer.phone ?: oldCustomer.phone,
-            )
-        } != null
+    fun delete(id: String): Boolean = transaction {
+        CustomerEntity.findById(UUID.fromString(id))?.delete() != null
     }
-
-    fun delete(id: String): Boolean = customers.remove(id) != null
 }

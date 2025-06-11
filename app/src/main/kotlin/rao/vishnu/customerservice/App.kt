@@ -28,6 +28,7 @@ fun Application.appModule() = this.apply {
 }
 
 fun main() {
+    DatabaseFactory.init()
     // Create a server and attaching a simple /health route
     embeddedServer(Netty, port = 8080, host = "0.0.0.0") {
         appModule()
