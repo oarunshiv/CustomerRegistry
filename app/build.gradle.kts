@@ -1,5 +1,8 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
     kotlin("jvm") version "2.1.20"
+    kotlin("plugin.serialization") version "1.9.10"
     application
 }
 
@@ -12,6 +15,15 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib"))
+    // Ktor core
+    implementation("io.ktor:ktor-server-core-jvm:3.1.3")
+    implementation("io.ktor:ktor-server-netty-jvm:3.1.3")
+
+    // JSON support
+    implementation("io.ktor:ktor-server-content-negotiation:3.1.3")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:3.1.3")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.1")
+
     testImplementation("org.jetbrains.kotlin:kotlin-test")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.1")
 }
