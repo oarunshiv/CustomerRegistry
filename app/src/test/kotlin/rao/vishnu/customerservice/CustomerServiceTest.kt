@@ -12,10 +12,11 @@ import kotlin.test.assertTrue
 class CustomerServiceTest {
 
     companion object {
-        private val CUSTOMER_ALICE = Customer(null, "Alice", "Wonderland", "a@example.com", "123", "In")
-        private val CUSTOMER_BOB = Customer(null, "Bob", "Builder", "b@example.com", "234")
+        private val CUSTOMER_ALICE = Customer(null, "Alice", "In", "Wonderland", "a@example.com", "123")
+        private val CUSTOMER_BOB = Customer(null, "Bob", null, "Builder", "b@example.com", "234")
 
     }
+
     private lateinit var service: CustomerService
 
     @BeforeTest
@@ -57,7 +58,7 @@ class CustomerServiceTest {
     fun `should update existing customer`() {
         val created = service.create(CUSTOMER_BOB)
 
-        val updated = Customer(null, "Thomas", "Engine", "tom@example.com", "555")
+        val updated = Customer(null, "Thomas", null, "Engine", "tom@example.com", "555")
         val result = service.update(created.id!!, updated)
         assertTrue(result)
 

@@ -1,5 +1,6 @@
 package rao.vishnu.customerservice
 
+import io.github.oshai.kotlinlogging.KotlinLogging
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.request.ContentTransformationException
 import io.ktor.server.request.receive
@@ -10,6 +11,8 @@ import io.ktor.server.routing.get
 import io.ktor.server.routing.post
 import io.ktor.server.routing.put
 import io.ktor.server.routing.route
+
+private val logger = KotlinLogging.logger {}
 
 fun Route.customerRoutes(customerService: CustomerService) {
     route("/customers") {
@@ -36,6 +39,8 @@ fun Route.customerRoutes(customerService: CustomerService) {
             val customer = try {
                 call.receive<Customer>()
             } catch (e: ContentTransformationException) {
+                val body = call.request.call.pipelineCall
+                logger.error(e) { "Error transforming $body" }
                 call.respond(HttpStatusCode.BadRequest, "Invalid input params: $e")
                 return@post
             }

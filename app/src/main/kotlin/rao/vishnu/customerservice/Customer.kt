@@ -6,8 +6,8 @@ import kotlinx.serialization.Serializable
 data class Customer(
     val id: String? = null,
     val firstName: String,
+    val middleName: String? = null,
     val lastName: String,
     val email: String,
-    val phone: String,
-    val middleName: String? = null
+    val phone: String
 )
