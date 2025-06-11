@@ -2,6 +2,7 @@ plugins {
     kotlin("jvm") version "2.1.20"
     kotlin("plugin.serialization") version "1.9.10"
     application
+    id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
 group = "rao.vishnu"
@@ -46,7 +47,7 @@ tasks.test {
 }
 
 kotlin {
-    jvmToolchain(21)
+    jvmToolchain(17)
 }
 
 tasks.test {
