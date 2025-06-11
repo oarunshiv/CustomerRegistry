@@ -24,6 +24,9 @@ dependencies {
     implementation("io.ktor:ktor-serialization-kotlinx-json:3.1.3")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.1")
 
+    implementation(group = "ch.qos.logback", name = "logback-classic", version = "1.5.18")
+    implementation("io.github.oshai:kotlin-logging-jvm:7.0.3")
+
     testImplementation("org.jetbrains.kotlin:kotlin-test")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.1")
 }
