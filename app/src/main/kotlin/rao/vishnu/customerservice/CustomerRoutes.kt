@@ -8,8 +8,8 @@ import io.ktor.server.response.respond
 import io.ktor.server.routing.Route
 import io.ktor.server.routing.delete
 import io.ktor.server.routing.get
+import io.ktor.server.routing.patch
 import io.ktor.server.routing.post
-import io.ktor.server.routing.put
 import io.ktor.server.routing.route
 
 private val logger = KotlinLogging.logger {}
@@ -37,7 +37,7 @@ fun Route.customerRoutes(customerService: CustomerService) {
 
         post {
             val customer = try {
-                call.receive<Customer>()
+                call.receive<CreateCustomerRequest>()
             } catch (e: ContentTransformationException) {
                 val body = call.request.call.pipelineCall
                 logger.error(e) { "Error transforming $body" }
@@ -48,13 +48,13 @@ fun Route.customerRoutes(customerService: CustomerService) {
             call.respond(HttpStatusCode.Created, created)
         }
 
-        put("{id}") {
+        patch("{id}") {
             val id = call.parameters["id"]
-            val customer = call.receive<Customer>()
+            val customer = call.receive<UpdateCustomerRequest>()
 
             if (id == null) {
                 call.respond(HttpStatusCode.BadRequest, "Invalid ID")
-                return@put
+                return@patch
             }
 
             val updated = customerService.update(id, customer)
