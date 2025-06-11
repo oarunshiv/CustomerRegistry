@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
     kotlin("jvm") version "2.1.20"
     kotlin("plugin.serialization") version "1.9.10"
@@ -24,12 +22,23 @@ dependencies {
     implementation("io.ktor:ktor-serialization-kotlinx-json:3.1.3")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.1")
 
+    // ORM framework for Kotlin
+    implementation("org.jetbrains.exposed:exposed-core:1.0.0-beta-2")
+    implementation("org.jetbrains.exposed:exposed-dao:1.0.0-beta-2")
+    implementation("org.jetbrains.exposed:exposed-jdbc:1.0.0-beta-2")
+    implementation("org.jetbrains.exposed:exposed-r2dbc:1.0.0-beta-2")
+    implementation("org.jetbrains.exposed:exposed-kotlin-datetime:1.0.0-beta-2")
+
+    implementation("org.postgresql:postgresql:42.7.3")
+    implementation("com.h2database:h2:2.1.214")
+    // Logging
     implementation(group = "ch.qos.logback", name = "logback-classic", version = "1.5.18")
     implementation("io.github.oshai:kotlin-logging-jvm:7.0.3")
 
     testImplementation("io.ktor:ktor-server-test-host:3.1.3")
     testImplementation("org.jetbrains.kotlin:kotlin-test")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.1")
+    testImplementation("org.assertj:assertj-core:3.25.3")
 }
 
 tasks.test {
@@ -45,6 +54,7 @@ tasks.test {
         events("PASSED", "SKIPPED", "FAILED")
     }
 }
+
 application {
     mainClass.set("rao.vishnu.customerservice.AppKt")
 }
