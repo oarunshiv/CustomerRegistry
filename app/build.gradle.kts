@@ -27,11 +27,10 @@ dependencies {
     implementation("org.jetbrains.exposed:exposed-core:1.0.0-beta-2")
     implementation("org.jetbrains.exposed:exposed-dao:1.0.0-beta-2")
     implementation("org.jetbrains.exposed:exposed-jdbc:1.0.0-beta-2")
-    implementation("org.jetbrains.exposed:exposed-r2dbc:1.0.0-beta-2")
     implementation("org.jetbrains.exposed:exposed-kotlin-datetime:1.0.0-beta-2")
 
     implementation("org.postgresql:postgresql:42.7.3")
-    implementation("com.h2database:h2:2.1.214")
+    testImplementation("com.h2database:h2:2.1.214")
     // Logging
     implementation(group = "ch.qos.logback", name = "logback-classic", version = "1.5.18")
     implementation("io.github.oshai:kotlin-logging-jvm:7.0.3")
