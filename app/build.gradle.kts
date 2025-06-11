@@ -36,6 +36,15 @@ tasks.test {
     useJUnitPlatform()
 }
 
+kotlin {
+    jvmToolchain(21)
+}
+
+tasks.test {
+    testLogging {
+        events("PASSED", "SKIPPED", "FAILED")
+    }
+}
 application {
     mainClass.set("rao.vishnu.customerservice.AppKt")
 }
