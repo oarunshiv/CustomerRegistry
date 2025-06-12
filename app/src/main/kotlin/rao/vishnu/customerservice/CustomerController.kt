@@ -75,7 +75,7 @@ fun Route.customerRoutes(customerService: CustomerService) {
 
             val created = customerService.create(customer)
             if(created == null) {
-                call.respond(HttpStatusCode.BadRequest, "Duplicate emailId")
+                call.respond(HttpStatusCode.Conflict, "Duplicate emailId")
                 return@post
             }
             call.respond(HttpStatusCode.Created, created)
@@ -90,6 +90,7 @@ fun Route.customerRoutes(customerService: CustomerService) {
                 return@patch
             }
 
+            // TODO return CONFLICT for duplicate emailId.
             val updated = customerService.update(id, customer)
             if (updated == null) {
                 call.respond(HttpStatusCode.NotFound, "Customer not found")
