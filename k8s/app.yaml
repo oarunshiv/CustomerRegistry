@@ -33,8 +33,10 @@ spec:
           ports:
             - containerPort: 8080
           env:
-            - name: JDBC_URL
+            - name: DB_URL
               value: jdbc:postgresql://postgres:5432/customerdb
+            - name: DB_DRIVER
+              value: org.postgresql.Driver
             - name: DB_USER
               value: postgres
             - name: DB_PASSWORD

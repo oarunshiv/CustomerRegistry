@@ -37,7 +37,12 @@ fun Application.appModule() = this.apply {
 }
 
 fun main() {
-    DatabaseFactory.init()
+    val dbUrl = System.getenv("DB_URL") ?: error("JDBC_URL environmental variable not configured")
+    val dbDriver = System.getenv("DB_DRIVER") ?: error("JDBC_URL environmental variable not configured")
+    val dbUser = System.getenv("DB_USER") ?: error("DB_USER environmental variable not configured")
+    val dbPassword = System.getenv("DB_PASSWORD") ?: error("DB_PASSWORD environmental variable not configured")
+
+    DatabaseFactory.init(dbUrl, dbDriver, dbUser, dbPassword)
     // Create a server and attaching a simple /health route
     embeddedServer(Netty, port = 8080, host = "0.0.0.0") {
         appModule()

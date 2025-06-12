@@ -3,6 +3,8 @@ package rao.vishnu.customerservice
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.jetbrains.exposed.v1.exceptions.ExposedSQLException
 import org.jetbrains.exposed.v1.jdbc.transactions.transaction
+import rao.vishnu.customerservice.dto.CustomerRequest
+import rao.vishnu.customerservice.dto.CustomerResponse
 import java.util.UUID
 
 private val logger = KotlinLogging.logger {}

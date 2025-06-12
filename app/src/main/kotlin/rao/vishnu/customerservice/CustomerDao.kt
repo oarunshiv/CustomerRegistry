@@ -4,6 +4,8 @@ import org.jetbrains.exposed.v1.core.dao.id.EntityID
 import org.jetbrains.exposed.v1.core.dao.id.UUIDTable
 import org.jetbrains.exposed.v1.dao.UUIDEntity
 import org.jetbrains.exposed.v1.dao.UUIDEntityClass
+import rao.vishnu.customerservice.dto.CustomerRequest
+import rao.vishnu.customerservice.dto.CustomerResponse
 import java.util.UUID
 
 /**

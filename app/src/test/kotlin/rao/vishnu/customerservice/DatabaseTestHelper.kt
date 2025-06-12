@@ -1,9 +1,9 @@
 package rao.vishnu.customerservice
 
-import org.jetbrains.exposed.v1.jdbc.Database
-import org.jetbrains.exposed.v1.jdbc.SchemaUtils
 import org.jetbrains.exposed.v1.jdbc.deleteAll
 import org.jetbrains.exposed.v1.jdbc.transactions.transaction
+import rao.vishnu.customerservice.dto.CustomerRequest
+import rao.vishnu.customerservice.dto.CustomerResponse
 
 object TestDatabase {
     private val ALICE_CREATE_REQUEST = CustomerRequest("Alice", "In", "Wonderland", "a@example.com", "123")
@@ -13,10 +13,9 @@ object TestDatabase {
     lateinit var BOB: CustomerResponse
 
     fun init() {
-        Database.connect("jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;", driver = "org.h2.Driver")
-        transaction {
-            SchemaUtils.create(Customers)
-        }
+        val dbUrl = "jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1"
+        val dbDriver = "org.h2.Driver"
+        DatabaseFactory.init(dbUrl, dbDriver, "", "", true)
     }
 
     fun reset() {

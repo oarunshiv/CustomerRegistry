@@ -1,4 +1,4 @@
-package rao.vishnu.customerservice
+package rao.vishnu.customerservice.dto
 
 import kotlinx.serialization.Serializable
 

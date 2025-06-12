@@ -7,6 +7,8 @@ import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.assertNull
 import rao.vishnu.customerservice.TestDatabase.ALICE
 import rao.vishnu.customerservice.TestDatabase.BOB
+import rao.vishnu.customerservice.dto.CustomerRequest
+import rao.vishnu.customerservice.dto.CustomerResponse
 import java.util.UUID
 import kotlin.test.BeforeTest
 import kotlin.test.Test
