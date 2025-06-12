@@ -12,6 +12,15 @@ import io.ktor.server.response.respond
 import kotlinx.serialization.json.Json
 
 val customerService = CustomerService()
+
+/**
+ * Configures the main Ktor application module.
+ *
+ * Installs JSON content negotiation with pretty-printing and lenient parsing.
+ * Sets up routing for health checks and customer-related endpoints.
+ *
+ * @receiver Application The Ktor application instance.
+ */
 fun Application.appModule() = this.apply {
     install(ContentNegotiation) {
         json(Json {

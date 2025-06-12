@@ -20,6 +20,7 @@ dependencies {
 
     // JSON support
     implementation("io.ktor:ktor-server-content-negotiation:3.1.3")
+    implementation("io.ktor:ktor-server-request-validation:3.1.3")
     implementation("io.ktor:ktor-serialization-kotlinx-json:3.1.3")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.1")
 
@@ -37,7 +38,7 @@ dependencies {
 
     testImplementation("io.ktor:ktor-server-test-host:3.1.3")
     testImplementation("org.jetbrains.kotlin:kotlin-test")
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.1")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.0")
     testImplementation("org.assertj:assertj-core:3.25.3")
 }
 

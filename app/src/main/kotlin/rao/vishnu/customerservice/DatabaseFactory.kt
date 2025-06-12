@@ -9,6 +9,14 @@ import org.jetbrains.exposed.v1.jdbc.transactions.transaction
 
 private val logger = KotlinLogging.logger {}
 
+/**
+ * Factory object responsible for initializing and configuring the database connection.
+ *
+ * Reads connection details from environment variables and connects to a PostgreSQL database.
+ * Sets up Exposed ORM with logging and ensures the 'Customers' table is created.
+ *
+ * @throws IllegalStateException if required environment variables are missing.
+ */
 object DatabaseFactory {
     fun init() {
         val dbUrl = System.getenv("JDBC_URL") ?: error("JDBC_URL environmental variable not configured")
@@ -22,7 +30,7 @@ object DatabaseFactory {
             password = dbPassword
         )
 
-        logger.info { "Connected to PostgreSQL at $dbUrl using $dbUser and $dbPassword" }
+        logger.info { "Connected to PostgreSQL at $dbUrl" }
 
         transaction {
             addLogger(Slf4jSqlDebugLogger)
