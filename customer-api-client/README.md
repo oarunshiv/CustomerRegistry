@@ -20,9 +20,10 @@ val customer = client.createCustomer("Alice", "alice@example.com")
 ## ▶️ Running Tests
 From the root project:
 ```bash
-./gradlew integrationTests -PbaseUrl=http://localhost:8080
+./gradlew :customer-api-client:integrationTest -PbaseUrl=http://localhost:8080
 ```
-If baseUrl is omitted, a default value inside the test will be used.
+If baseUrl is omitted, default value (`http://localhost:8080`) will be used.
+
 ---
 ## ♻️ Data Cleanup
 Each test ensures cleanup (delete created records) or runs against isolated IDs. 
@@ -30,7 +31,7 @@ You can extend the @BeforeEach and @AfterEach hooks for test-level isolation.
 ---
 ## ✅ Tests Included
 
-* `Create customer`
+* Create customer
 * Handle duplicate email
 * Get all customers
 * Get by ID (valid + invalid)

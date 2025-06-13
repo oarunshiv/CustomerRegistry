@@ -16,6 +16,7 @@ This is the main Ktor application for managing customers. It includes endpoints 
 ## 📄 Environment Variables
 | Variable      | Description            |
 |---------------|------------------------|
-| `JDBC_URL`    | JDBC connection string |
+| `DB_URL`      | JDBC connection string |
+| `DB_DRIVER`   | Postgres driver string |
 | `DB_USER`     | Database username      |
 | `DB_PASSWORD` | Database password      |
