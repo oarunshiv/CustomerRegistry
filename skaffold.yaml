@@ -5,8 +5,9 @@ metadata:
 build:
   artifacts:
     - image: customer-app
+      context: .
       docker:
-        dockerfile: Dockerfile
+        dockerfile: app/Dockerfile
   local:
     push: false
 manifests:

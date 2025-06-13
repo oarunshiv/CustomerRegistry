@@ -1,16 +1,12 @@
 plugins {
-    kotlin("jvm") version "2.1.20"
-    kotlin("plugin.serialization") version "1.9.10"
+    kotlin("jvm")
+    kotlin("plugin.serialization")
     application
     id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
 group = "rao.vishnu"
 version = "1.0"
-
-repositories {
-    mavenCentral()
-}
 
 dependencies {
     implementation(kotlin("stdlib"))
@@ -45,15 +41,8 @@ dependencies {
 
 tasks.test {
     useJUnitPlatform()
-}
-
-kotlin {
-    jvmToolchain(17)
-}
-
-tasks.test {
     testLogging {
-        events("PASSED", "SKIPPED", "FAILED")
+        events("SKIPPED", "FAILED")
     }
 }
 

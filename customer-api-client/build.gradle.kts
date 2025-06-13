@@ -1,14 +1,10 @@
 plugins {
-    kotlin("jvm") version "2.1.20"
-    kotlin("plugin.serialization") version "1.9.10"
+    kotlin("jvm")
+    kotlin("plugin.serialization")
 }
 
 group = "rao.vishnu"
 version = "0.1.0"
-
-repositories {
-    mavenCentral()
-}
 
 dependencies {
     implementation(project(":common"))
@@ -24,15 +20,11 @@ dependencies {
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.2")
 }
 
-kotlin {
-    jvmToolchain(17)
-}
-
-
 tasks.test {
-    useJUnitPlatform()
+    useJUnitPlatform() {
+        excludeTags("integrationTest")
+    }
 }
-
 
 tasks.register<Test>("integrationTest") {
     description = "Runs integration tests with optional -PbaseUrl"
@@ -42,6 +34,9 @@ tasks.register<Test>("integrationTest") {
         includeTags("integrationTest")
     }
 
+    testLogging {
+        events("PASSED", "SKIPPED", "FAILED")
+    }
     // Pass the baseUrl property to tests via system properties
     systemProperty("baseUrl", project.findProperty("baseUrl") ?: "http://localhost:8080")
 }
